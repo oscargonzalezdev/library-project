@@ -8,7 +8,7 @@ router.get("/books", (req, res, next) => {
 
     Book.find()
         .then( bookArr => {
-            console.log(bookArr.length);
+            // console.log(bookArr.length);
             res.render("books/books-list", {books: bookArr});
         }
         )
@@ -18,11 +18,35 @@ router.get("/books", (req, res, next) => {
         })
 });
 
+// create route for render the form 
+router.get("/books/create", (req, res, next) => {
+    res.render("books/book-create");
+});
+
+// POST route to save a new book to the database in the books collection
+router.post('/books/create', (req, res, next) => {
+    // console.log(req.body);
+    const newBook = {
+        title: req.body.title,
+        description: req.body.description,
+        author: req.body.author,
+        rating: req.body.rating,
+    }
+    Book.create(newBook)
+    .then( response => {
+        console.log("New book stored successfuly", response);
+        res.redirect("/books");
+    })
+    .catch( err => {
+        console.log("error creating a new document in DB", err);
+        next(err);
+    })
+
+  });
+
 // create route for book details
 router.get("/books/:bookId", (req, res, next) => {
-
     const id = req.params.bookId;
-
     Book.findById(id)
         .then( bookDetails => {
             console.log(bookDetails);
