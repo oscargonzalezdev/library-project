@@ -41,9 +41,7 @@ router.post('/books/create', (req, res, next) => {
             console.log("error creating a new document in DB", err);
             next(err);
         })
-
 });
-
 
 // create route for book details
 router.get("/books/:bookId", (req, res, next) => {
@@ -73,8 +71,6 @@ router.get("/books/:bookId/edit", (req, res, next) => {
         })
 })
 
-
-
 // request to update books
 router.post("/books/:bookId/edit", (req, res, next) => {
     const id = req.params.bookId;
@@ -86,14 +82,29 @@ router.post("/books/:bookId/edit", (req, res, next) => {
     };
 
     Book.findByIdAndUpdate(id, newDetails)
-    .then(response => {
-        console.log(response);
-        res.redirect(`/books/${response._id}`)
-    })
-    .catch(err => {
-        console.log("error updating book", err);
-        next(err);
-    })
+        .then(response => {
+            console.log(response);
+            res.redirect(`/books/${response._id}`)
+        })
+        .catch(err => {
+            console.log("error updating book", err);
+            next(err);
+        })
+})
+
+// request to delete books
+
+router.post("/books/:bookId/delete", (req, res, next) => {
+    const id = req.params.bookId;
+    Book.findByIdAndRemove(id)
+        .then(response => {
+            console.log(response);
+            res.redirect("/books")
+        })
+        .catch(err => {
+            console.log("error deleting book", err);
+            next(err);
+        })
 })
 
 module.exports = router;
