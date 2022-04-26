@@ -6,7 +6,6 @@ const router = require("express").Router();
 
 // route to display all books
 router.get("/books", (req, res, next) => {
-
     Book.find()
         .populate('author')
         .then(bookArr => {
@@ -99,7 +98,6 @@ router.post("/books/:bookId/edit", (req, res, next) => {
 })
 
 // request to delete books
-
 router.post("/books/:bookId/delete", (req, res, next) => {
     const id = req.params.bookId;
     Book.findByIdAndRemove(id)
