@@ -5,7 +5,7 @@ const { render, response } = require("../app");
 const router = require("express").Router();
 
 // route to display all books
-router.get("/books", (req, res, next) => {
+router.get("/", (req, res, next) => {
     Book.find()
         .populate('author')
         .then(bookArr => {
@@ -20,7 +20,7 @@ router.get("/books", (req, res, next) => {
 });
 
 // create route for render the form 
-router.get("/books/create", (req, res, next) => {
+router.get("/create", (req, res, next) => {
     Author.find()
         .then(authorsArr => {
             res.render("books/book-create", {authors: authorsArr});
@@ -28,7 +28,7 @@ router.get("/books/create", (req, res, next) => {
 });
 
 // POST route to save a new book to the database in the books collection
-router.post('/books/create', (req, res, next) => {
+router.post('/create', (req, res, next) => {
     // console.log(req.body);
     const newBook = {
         title: req.body.title,
@@ -48,7 +48,7 @@ router.post('/books/create', (req, res, next) => {
 });
 
 // create route for book details
-router.get("/books/:bookId", (req, res, next) => {
+router.get("/:bookId", (req, res, next) => {
     const id = req.params.bookId;
     Book.findById(id)
         .populate('author')
@@ -64,7 +64,7 @@ router.get("/books/:bookId", (req, res, next) => {
 });
 
 // display form to update books
-router.get("/books/:bookId/edit", (req, res, next) => {
+router.get("/:bookId/edit", (req, res, next) => {
     const id = req.params.bookId;
     Book.findById(id)
         .then(bookDetails => {
@@ -77,7 +77,7 @@ router.get("/books/:bookId/edit", (req, res, next) => {
 })
 
 // request to update books
-router.post("/books/:bookId/edit", (req, res, next) => {
+router.post("/:bookId/edit", (req, res, next) => {
     const id = req.params.bookId;
     const newDetails = {
         title: req.body.title,
@@ -98,7 +98,7 @@ router.post("/books/:bookId/edit", (req, res, next) => {
 })
 
 // request to delete books
-router.post("/books/:bookId/delete", (req, res, next) => {
+router.post("/:bookId/delete", (req, res, next) => {
     const id = req.params.bookId;
     Book.findByIdAndRemove(id)
         .then(response => {

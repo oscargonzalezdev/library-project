@@ -5,7 +5,7 @@ const { render, response } = require("../app");
 const router = require("express").Router();
 
 // route to display list of authors
-router.get("/authors", (req, res, next) => {
+router.get("/", (req, res, next) => {
     Author.find()
     .then(authorsArr => {
         res.render("authors/authors-list", {authors: authorsArr})
@@ -15,6 +15,5 @@ router.get("/authors", (req, res, next) => {
         next(err)
     })
 })
-
 
 module.exports = router;
