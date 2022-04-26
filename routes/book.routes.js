@@ -1,4 +1,5 @@
 const Book = require("../models/Book.model")
+const Author = require("../models/Author.model")
 const { render, response } = require("../app");
 
 const router = require("express").Router();
@@ -7,6 +8,7 @@ const router = require("express").Router();
 router.get("/books", (req, res, next) => {
 
     Book.find()
+        .populate('author')
         .then(bookArr => {
             // console.log(bookArr.length);
             res.render("books/books-list", { books: bookArr });
@@ -20,7 +22,10 @@ router.get("/books", (req, res, next) => {
 
 // create route for render the form 
 router.get("/books/create", (req, res, next) => {
-    res.render("books/book-create");
+    Author.find()
+        .then(authorsArr => {
+            res.render("books/book-create", {authors: authorsArr});
+        })
 });
 
 // POST route to save a new book to the database in the books collection
@@ -47,6 +52,7 @@ router.post('/books/create', (req, res, next) => {
 router.get("/books/:bookId", (req, res, next) => {
     const id = req.params.bookId;
     Book.findById(id)
+        .populate('author')
         .then(bookDetails => {
             console.log(bookDetails);
             res.render("books/book-details", { book: bookDetails });
