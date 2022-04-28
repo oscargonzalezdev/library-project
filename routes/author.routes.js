@@ -3,6 +3,7 @@ const Author = require("../models/Author.model")
 const { render, response } = require("../app");
 
 const router = require("express").Router();
+const isLoggedIn = require("../middleware/route-guard")
 
 // route to display list of authors
 router.get("/", (req, res, next) => {
@@ -17,7 +18,7 @@ router.get("/", (req, res, next) => {
 })
 
 // create route for render the form 
-router.get("/create", (req, res, next) => {
+router.get("/create", isLoggedIn, (req, res, next) => {
     Author.find()
         .then(authorsArr => {
             res.render("authors/authors-create", {authors: authorsArr});
@@ -25,7 +26,7 @@ router.get("/create", (req, res, next) => {
 });
 
 // POST route to create a new author
-router.post('/create', (req, res, next) => {
+router.post('/create', isLoggedIn, (req, res, next) => {
     // console.log(req.body);
     const newAuthor = {
         name: req.body.name,
